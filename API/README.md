@@ -13,7 +13,7 @@ Creates some components based on [Implementing Custom Components](https://github
 
 In the following schema can be seen the integration of Discovery-Self and Application Context:
 
-![alt text](./mediascape_discovery_multi.png "MediaScape - Agent and Application Context")
+![alt text](./mediascap_discovery_multi.png "MediaScape - Agent and Application Context")
 
 ## API
 [Top][]
