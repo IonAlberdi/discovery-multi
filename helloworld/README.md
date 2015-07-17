@@ -1,7 +1,6 @@
 ##Discovery-Multi Hello World
 
-This HelloWorld shows the discoveryForApplicationContext and applicationContext librarys developed for the [MediaScape project](http://mediascapeproject.eu/) in action.  
-![alt text](../application-context-components.png "MediaScape - Agent and Application Context")
+This HelloWorld shows the discoveryForApplicationContext and applicationContext librarys developed for the [MediaScape project](http://mediascapeproject.eu/) in action. 
 
 ## Navigation
 [Installation][] | [Prerequisite][] | [Deployment][]  | [Run][]
