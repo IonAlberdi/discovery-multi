@@ -1,4 +1,4 @@
-#Discovery-Self
+#Discovery-Multi
 
 In this folder you will find the Discovery For Aplication Context developed for [MediaScape project](http://mediascapeproject.eu/).
 
@@ -11,6 +11,15 @@ In this folder you will find the Discovery For Aplication Context developed for 
 MediaScape targets applications that provide shared experiences across multiple devices.
 
 This library builds awareness about the device features and the available devices ready to be connected for each application instance. To achieve it, the MediaScape Discovery library must introspect the features of the device and detect the reachable devices through the possible network interfaces and communication protocols.
+
+Discovery For Aplication Context integrates Discovery API and Application Context:
+* Discovery API:
+This library build awareness about the device features and the available devices ready to be connected for each application instance.
+https://github.com/mediascape/discovery-self
+* Application Context:
+The agent context provides information about the current agent, it’s capabilities and provides events (as well as sensor management)
+https://github.com/mediascape/application-context
+
 
 ### Structure
 [Top][]
