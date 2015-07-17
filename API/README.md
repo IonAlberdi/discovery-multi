@@ -1,4 +1,4 @@
-# Discovery-self API
+# Discovery-Multi API
 
 ## Navigation
 [Overview][] | [Architecture][] | [API][] | [JS Discovery API for Capabilities Discovery Agents][] | [JS Discovery API for Networking Discovery Agents][] | [Examples][]
