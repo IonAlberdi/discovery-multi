@@ -8,9 +8,17 @@
 
 Creates some components based on [Implementing Custom Components](https://github.com/mediascape/application-context/tree/master/API#implementing-custom-components) and using the [Discovery API](https://github.com/mediascape/discovery-self/tree/master/API).
 
-## API
+## Architecture
+[Top][]
 
-Those are the agents that Discovery-Multi API discovers and encapsulates in components:
+In the following schema can be seen the integration of Discovery-Self and Application Context:
+
+![alt text](./mediascape_discovery_multi.png "MediaScape - Agent and Application Context")
+
+## API
+[Top][]
+
+Those are the agents that Discovery-Multi API discovers and encapsulates into Custom Components:
 
 * UPNP
 
