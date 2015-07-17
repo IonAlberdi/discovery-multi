@@ -1,7 +1,7 @@
 # Discovery-Multi API
 
 ## Navigation
-[Overview][] | [Architecture][] | [API][] | [JS Discovery API for Capabilities Discovery Agents][] | [JS Discovery API for Networking Discovery Agents][] | [Examples][]
+[Overview][] | [Architecture][] | [API][]
 
 ## Overview
 [Top][]
@@ -9,6 +9,8 @@
 Creates some components based on [Implementing Custom Components](https://github.com/mediascape/application-context/tree/master/API#implementing-custom-components) and using the [Discovery API](https://github.com/mediascape/discovery-self/tree/master/API).
 
 ## API
+
+Those are the agents that Discovery-Multi API discovers and encapsulates in components:
 
 * UPNP
 
