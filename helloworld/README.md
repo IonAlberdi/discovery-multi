@@ -1,7 +1,6 @@
-##Application-Context Hello World
+##Discovery-Multi Hello World
 
-This HelloWorld shows the agentContext and applicationContext librarys developed for the [MediaScape project](http://mediascapeproject.eu/) in action.  
-![alt text](../application-context-components.png "MediaScape - Agent and Application Context")
+This HelloWorld shows the discoveryForApplicationContext and applicationContext librarys developed for the [MediaScape project](http://mediascapeproject.eu/) in action. 
 
 ## Navigation
 [Installation][] | [Prerequisite][] | [Deployment][]  | [Run][]
@@ -15,7 +14,7 @@ This HelloWorld shows the agentContext and applicationContext librarys developed
 
 ####Deployment
 Next to this file you will find a script called `deploy.sh`.  
-This script will clone the git and install everything in a folder called `deploy` relative to the file itsself. It will copy the [server](../Server) and the [API](../API) including this HelloWorld sample. After preparing the files, the script will install all needed dependencies for the backend and start a small setup-script to configure it.   
+This script will clone the git and install everything in a folder called `deploy` relative to the file itsself. It will copy the [server](https://github.com/mediascape/application-context/tree/master/Server) and [Application Context API](../API), [Discovery For Application Context API](../API) and [Discovery API](https://github.com/mediascape/discovery-self/tree/master/API) including this HelloWorld sample. After preparing the files, the script will install all needed dependencies for the backend and start a small setup-script to configure it.   
 Please dont execute it inside the git folder. Best practice is to download just the the `.sh` file and execute.  
 
 ### run

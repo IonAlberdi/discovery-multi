@@ -1,300 +1,103 @@
-# Discovery-self API
+# Discovery-Multi API
 
 ## Navigation
-[Overview][] | [Architecture][] | [API][] | [JS Discovery API for Capabilities Discovery Agents][] | [JS Discovery API for Networking Discovery Agents][] | [Examples][]
+[Overview][] | [Architecture][] | [API][]
 
 ## Overview
 [Top][]
 
-This library build awareness about the device features and the available devices ready to be connected for each application instance. To achieve it, this *Discovery* library introspects the features of the device and detect the reachable devices through the possible network interfaces and communication protocols.
-
-This document summarizes the *Discovery* API to access the implemented JS library information. The target of this document is to reflect the status of design and development of the *Discovery* library and provide a list of available functions.
-
-New features are being implemented.
-
-The solutions include two major possibilities:
-* **Web-Broser Agents**- W3C specification based Javascript functions gaining the abilities of the web browser to know and operate its underlying HW and SW stack
-* **Native Agents** executed publishing the introspection results in a uniform format
-
----
+Creates some components based on [Implementing Custom Components](https://github.com/mediascape/application-context/tree/master/API#implementing-custom-components) and using the [Discovery API](https://github.com/mediascape/discovery-self/tree/master/API).
 
 ## Architecture
 [Top][]
 
-A major concern is the heterogeneity of the devices where agents must perform their activity. However, from the point of view of the developer, there must be a common interface to these agents, independent of the underlying functionality, technology or pipeline.
+In the following schema can be seen the integration of Discovery-Self and Application Context:
 
-This Discovery library fosters Web-browser based agents. First, because native agents developed on top of specific OS SDK and HW API must be implemented and built for each kind of target device and OS, requiring continuous upgrade as the OS updates. Second, most of Web-browser agents are based on W3C standards or drafts, widening the suitable devices and increasing the future applicability.
-
-The MediaScape JavaScript Discovery API hides the complexity of the Discover Agents HTTP interfaces. This way, the developer does not need to take care of HTTP interactions, and just needs to execute Javascript calls.
-
-**_The Discovery API interfaces underlying Agents, native or web-browser based. In order to create a uniform JavaScript interface, it has been defined a common REST web services for local native agents. The results are formatted as JSON. This architecture is depicted in the next figure._**
-
-![alt text](https://github.com/mediascape/discovery-self/blob/master/API/DiscoveryAgentAPI.png "Discovery Architecture based on Discovery Agents")
-
-The different agents for different **_target_** technologies will be operable through a pattern of URLs as follows:
- ```
- http://localhost:<port>/discoveryagent/<target>/<function>
- ```
-
-This way, all the agents installed on a device will have a common URL, where each agent would meet a different target, but all sharing a common function dataset.
-
-The result of calling functions is a JSON response with this format
- ```
- {functionName:[{itemName1:{itemValue1}, itemName2:{itemValue2}, … }]}
- ```
-
-For example the next URLs:
-```html
-	http://localhost:8182/discoveragent/bluetooth/presence
-	http://localhost:8182/discoveragent/bluetooth/extra
-	http://localhost:8182/discoveragent/upnp/presence
-	http://localhost:8182/discoveragent/upnp/devices
-	http://localhost:8182/discoveragent/upnp/services
-	http://localhost:8182/discoveragent/upnp/actions
-	http://localhost:8182/discoveragent/upnp/parameters
-	http://localhost:8182/discoveragent/upnp/extra
-```
-
-This way different native implemented discovery agents have a standard interface. Thus, the Discovery API can operate with them on an agnostic way from the inner development language or architecture.
-
----
+![alt text](./mediascape_discovery_multi.png "MediaScape - Agent and Application Context")
 
 ## API
 [Top][]
 
-In order to preserve the smoothness of the Web application, it is mandatory to perform asynchronous requests to the discovery agents to avoid blocking the application runtime waiting for the discovery responses. Promises overcomes these issues by providing uniform patterns for the callbacks of asynchronous operations.
-
-Thus, the pattern for the different **_target_** discovery technologies will be:
- ```javascript
- mediascape.discovery.<function>("<target>",[parameters]).then(cbOk(returnedJSON),cbErr(returnedJSON));
- ```
-
-And the result is a JavaScript object with this format:
- ```
- {"functionName":[{"itemName1":{"itemValue1"}, "itemName2":{"itemValue2"}, … }]}
- ```
-* IsPresent
- ```javascript
- mediascape.discovery.isPresent().then(cb(presenceJSON),cb2(errorJSON));
- ```
- 
-* Extra
- ```javascript
- mediascape.discovery.getExtra().then(cb(extraJSON),cb2(errorJSON));
- ```
-
-This **_general function_** returns all the discovered information about the device, service or asset in a human-understandable way that could be relevant for the user. To this end, it performs the calls to all the available Discovery Agents a produces an **_integrated result_**.
-
-> For the correct invocation of the services it is necessary to understand the steps that the API follows to get the information:
-> * If the *Discovery* library gets response to calls to underlying native agents (developed for Android at this moment), it collect the requested information
-> * Otherwise the web browser-based agents are requested
-
----
-
-### JS Discovery API for Capabilities Discovery Agents
-[Top][]
-
-Bringing the need of getting awareness of the features of a device, this Discovery library collects the capabilities supplied by each appliance and create a common inventory where the available capabilities for each device are published. Thus, the list of available capabilities is stored through the *MediaScape Shared Context API* to get persistence and share the results.
-
-The first thing that the Discovery API must do is to check for the agent presence. Once it is verified, the Discovery API can publish the agent availability.
-
-For each **_target_** discovery technology, two functions are available:
-
-* Presence
- ```javascript
- mediascape.discovery.isPresent("<target>").then(cb(presenceJSON),cb2(errorJSON));
- ```
-
-This function provides a boolean result to get awareness of the agent availability. For native *Discovery* Agents It performs a basic REST call and depending on the HTTP response (success 2xx or error 4xx/5xx), whether the agent is installed, deployed and running or not. This way all the agents installed on a device can be first checked for existence then probed for more detailed information.
-
-> For the correct invocation of the services it is necessary to understand the steps that the API follows to get the information:
-> * If the web browser is able to provide directly the requested information the *Discovery* library returns it
-> * Otherwise the *Discovery* library calls to underlying native agents (developed for Android at this moment) to collect the requested information
-
-
-* Extra
- ```javascript
- mediascape.discovery.getExtra("<target>").then(cb(extraJSON),cb2(errorJSON));
- ```
-
-This function returns additional information about the device, service or asset in a human-understandable way that could be relevant for the user.
-
-> For the correct invocation of the services it is necessary to understand the steps that the API follows to get the information:
-> * If the web browser is able to provide directly the requested information the *Discovery* library returns it
-> * Otherwise the *Discovery* library calls to underlying native agents (developed for Android at this moment) to collect the requested information
-
----
-
-#### Discovery of Device Capabilities
-[Top][]
-
-This section collects the **_current_** available information available through the *Discovery* API.
-
-**Screen**
-* IsPresent
-This function provide the information about the user’s device screen availability. This information is based in the screen object of javascript.
-* GetExtra
-This function provide the information about the visitor's device screen. This information is based in the screen object of javascript.
- 
-**Geolocation**
-* IsPresent
-This function provide information about user’s device geolocation sensor availability. This information is based in the Geolocation API of javascript.
-* GetExtra
-This function provide user’s location using the positioning capabilities of their device. This information is based in the Geolocation API of javascript.
- 
-**Orientation**
-* IsPresent
-This function provide information about user’s device orientation sensor availability.
-* GetExtra
-This function provide user’s device orientation using the DeviceOrientation event implemented in javascript.
+Those are the agents that Discovery-Multi API discovers and encapsulates into Custom Components:
 
-**Camera**
-* IsPresent
-This function provide information about user’s device camera availability. This information is based in the Media Capture and Streams API of javascript.
-* GetExtra
-This function provide information about user’s device camera numbers. This information is based in the Media Capture and Streams API of javascript.
- 
-**Vibration**
-* IsPresent
-This function provide information about user’s device vibration sensor availability. This information is based in the Vibration API of javascript.
+* UPNP
 
-**Battery**
-* IsPresent
-This function provide information about user’s device battery sensor availability. This information is based in the BatteryStatus API of javascript.
-* GetExtra
-This function provide information about user’s device battery status. This information is based in the BatteryStatus API of javascript.
+	Calls mediascape.discovery.isPresent function to detect the presence of the upnp agent, if the agent exists, the system sets the upnp status as supported, unless it will be set as unsupported. Then it will initialize upnp value calling to mediascape.discovery.getDevices and returning the list of ids of the services available to consume by upnp.
 
-**UserProximity**
-* IsPresent
-This function provide information about user’s device proximity sensor availability. This information is based in the UserProximityEvent event of javascript.
-* GetExtra
-This function provide information about user’s device proximity sensor. This information is based in the UserProximityEvent event of javascript.
+* Bluetooth
 
-**DeviceProximity**
-* IsPresent
-This function provide information about user’s device proximity sensor availability. This information is based in the DeviceProximityEvent event of javascript.
-* GetExtra
-This function provide information about user’s device proximity sensor availability. This information is based in the deviceProximityEvent event of javascript.
+	Calls mediascape.discovery.isPresent function to detect the presence of the bluetooth agent, if the agent exists, the system sets the bluetooth status as supported, unless it will be set as unsupported. Then it will initialize bluetooth value calling to mediascape.discovery.getDevices and returning the list of ids of the devices available to connect by bluetooth.
 
-**Language**
-* IsPresent
-This function provide information about user’s device browser language adquisition availability. This information is based in the Navigator object of javascript.
-* GetExtra
-This function provide information about user’s device browser language. This information is based in the Navigator object of javascript.
+* NamedWebSockets
 
-**DeviceType**
-* IsPresent
-This function provide information about user’s device type adquisition availability. This information is based in the Navigator object of javascript.
-* GetExtra
-This function provide information about user’s device type. This information is based in the Navigator object of javascript.
+	Calls mediascape.discovery.isPresent function to detect the presence of the NamedWebSockets agent, if the agent exists, the system sets the namedwebsockets status as supported, unless it will be set as unsupported. Then it will initialize namedwebsockets value calling to mediascape.discovery.getDevices and returning the list of ids of the devices connected to namedwebsockets "mediascape".
 
-**Connection**
-* IsPresent
-This function provide information about user’s connection type adquisition availability. This information is based in the Navigator object of javascript.
-* GetExtra
-This function provide information about user’s device connection type. This information is based in the Navigator object of javascript.
+* Screen Size
 
----
+	Calls mediascape.discovery.isPresent function to detect the presence of the screen size agent, if the agent exists, the system sets the screenSize status as supported, unless it will be set as unsupported. Then it will initialize screenSize value calling to mediascape.discovery.getExtra and returning the size of the screen of the device and will define on and off functions to subscribe to an event. This event will return the changes hapened on the size of the screen.
 
-### JS Discovery API for Networking Discovery Agents
-[Top][]
+* Language
 
-Bringing the need of getting awareness of the reachable assets through a device by means of its network interface or supported communication protocols, this Discovery library detect the devices, services and media sources reachable by each appliance and create a common inventory where the available assets for each device are published. Thus, the list of available assets is stored through the *MediaScape Shared Context API* to get persistence and share the results.
+	Calls mediascape.discovery.isPresent function to detect the presence of the language agent, if the agent exists, the system sets the language status as supported, unless it will be set as unsupported. Then it will initialize language value calling to mediascape.discovery.getExtra and returning the language of the device.
 
-Because most of the Discovery protocols for networks exploit Multicast and UDP connections not available yet through the Web Browser, it is necessary to employ Native Agents to overcome interoperable connectivity.
+* Platform
 
-The complete set of JavaScript functions defined for each Networking Discovery Agent are listed below.
+ 	Calls to navigator.platform function to detect the presence of the platform agent, if the agent exists, the system sets the platform status as supported, unless it will be set as unsupported. Then it will initialize platform value calling to navigator.platform and returning the platform of the device.
 
-* IsPresent
-This function provides availability status of the agent. For native *Discovery* Agents It performs a basic REST call and depending on the HTTP response (success 2xx or error 4xx/5xx), whether the agent is installed, deployed and running or not. This way all the agents installed on a device can be first checked for existence then probed for more detailed information.
+* NavigatorProduct
 
-* GetProfile
-This function provides information of the level of compliance with the standard interface or protocol or skills of the agent.
+	Calls to navigator.product function to detect the presence of the product agent, if the agent exists, the system sets the navigatorProduct status as supported, unless it will be set as unsupported. Then it will initialize navigatorProduct value calling to navigator.platform and returning the the engine (product) name of the device browser.
+	
+* On Line
 
-* GetDevices
-This function launches the discovery messages and collects the reachable devices through a specific interface or protocol.
+	Calls to navigator.onLine function to detect the presence of the onLine agent, if the agent exists, the system sets the onLine status as supported, unless it will be set as unsupported. Then it will initialize onLine value calling to navigator.onLine and returning if the device is connected.
 
-* GetServices
-This function launches the discovery messages and collects the reachable services from the previously detected devices through a specific interface or protocol.
+* Device Type
 
-* GetAssets
-This function launches the discovery messages and collects the reachable assets, or media resources, from the previously detected devices through a specific interface or protocol coming from internal and external devices.
+	Calls mediascape.discovery.isPresent function to detect the presence of the deviceType agent, if the agent exists, the system sets the deviceType status as supported, unless it will be set as unsupported. Then it will initialize deviceType value calling to mediascape.discovery.getExtra and  returning the type of the device.
 
-* GetExtra
-This function returns additional information about the device, service or asset in a human-understandable way that could be relevant for the user.
+* User Proximity
 
-* GetActions
-This function provides a set of controls that can be operated over the services or assets controlling media contents such as video/audio.
+	Calls mediascape.discovery.isPresent function to detect the presence of the geolocation agent, if the agent exists, the system sets the geolocation status as supported, unless it will be set as unsupported.Then it will initialize geolocation value calling to mediascape.discovery.getExtra and returning the state of the geolocation senson of the device and will define on and off functions to subscribe to an event. This event will return the changes hapened on the geolocation sensor.
 
-* GetParameters
-This function provides the list of parameters that must be included to operate over the services or assets.
+* User Proximity
 
-* connectNWS
-This function has been created just for namedwebsocket, it creates the connection to the sockets and start the connection and disconnection listeners.
+	Calls mediascape.discovery.isPresent function to detect the presence of the user proximity agent, if the agent exists, the system sets the userProximity status as supported, unless it will be set as unsupported.Then it will initialize userProximity value calling to mediascape.discovery.getExtra and returning the state of the user proximity senson of the device and will define on and off functions to subscribe to an event. This event will return the changes hapened on the user proximity sensor.
 
----
+* Device Proximity
 
-#### Discovery of Device Networking
-[Top][]
+	Calls mediascape.discovery.isPresent function to detect the presence of the device proximity agent, if the agent exists, the system sets the deviceProximity status as supported, unless it will be set as unsupported. Then it will initialize deviceProximity value calling to mediascape.discovery.getExtra and returning the state of the device proximity senson of the device and will define on and off functions to subscribe to an event. This event will return the changes hapened on the device proximity sensor.
 
-At this moment to check the valid proposed architecture for native implemented agents a basic Android RESTful agent for getting UPnP and Bluetooth services has been developed:
+* Touch Screen
 
-Very thin and lightweight.
-Standard information.
-Completely RESTful, the right way to build apps.
-Inclusion of Restlet and Cling libraries.
+	Calls mediascape.discovery.isPresent function to detect the presence of the touchScreen agent, if the agent exists, the system sets the touchScreen status as support, unless it will be set as unsupported.
 
-This section collects the **_current_** reachable assets through the *Discovery* API.
+* Vibration
 
-**Bluetooth**
+	Calls mediascape.discovery.isPresent function to detect the presence of the vibration agent, if the agent exists, the system sets the vibration status as maybe, unless it will be set as unsupported.
+		
+* Screen Orientation
 
-This module provide information about user’s device bluetooth interface availability and the detected bluetooth devices in the surrounding area.
+	Calls mediascape.discovery.isPresent function to detect the presence of the screen orientation agent, if the agent exists, the system sets the orientation status as supported, unless it will be set as unsupported. Then it will initialize orientation value calling to mediascape.discovery.getExtra and returning the orientation of the device and will define on and off functions to subscribe to the events. This events will return the changes hapened on orientation.
 
-**UPnP Discovery Agent**
+* Connection
 
-This module provide information about user’s device UPnP protocol availability and the detected UPnP services, assets and operations hosted on devices in the same network.
+	Calls mediascape.discovery.isPresent function to detect the presence of the connection agent, if the agent exists, the system sets the connection status as supported, unless it will be set as unsupported. Then it will initialize connection value calling to mediascape.discovery.getExtra and returning the type of the connection of the device and will define on and off functions to subscribe to a event. This events will return the changes hapened on connection type.
 
-**NamedWebSockets**
+* Audio
 
-This module provide information about device's connected to a local named web socket.
+	Calls mediascape.discovery.isPresent function to detect the presence of the audio agent, if the agent exists, the system sets the video status as supported, unless it will be set as unsupported. Then it will initialize audio value calling to mediascape.discovery.getExtra and returning the number of audio elements of the device.
 
----
+* Camera
 
-**Example of calls:**
+	Calls mediascape.discovery.isPresent function to detect the presence of the camera agent,if the agent exists, the system sets the camera status as supported, unless it will be set as unsupported. Then it will initialize video value calling to mediascape.discovery.getExtra and returning the number of cameras of the device.
 
-The examples that follows show the use of Discovery API. In the first example we can see the discovery of parameters for the action "SetVolume" of the service "RenderingControl" defined in the 4th device of the UPnP devices list.
-
-However, in the second example we can see the discovery of device capabilities, in this case,the presence of the bluetooth agent.
-
-```html
-	mediascape.discovery.getParameters("upnp",4, "RenderingControl","SetVolume").then(function(data) {console.log('Parameters Ok'); console.log(data);}, function(data){console.log('Parameters Error');});
-			
-	mediascape.discovery.isPresent("bluetooth").then(function(data){console.log('Bluetooth Presence Ok');console.log(data);}, function(data){console.log("Bluetooth Presence Error");});
-
-	mediascape.discovery.getDevices("namedwebsockets").then(function(data){console.log('NamedWebSockets Presence Ok');console.log(data);}, function(data){console.log("Devices Error");});
-```
-
----
-
-## Examples
-
-### Code Example
-
-You can find the implementation of an example for the use of the code in the web:
-
-https://github.com/mediascape/discovery-self/tree/master/helloworld
-
-### Use Example
-
-You can view this example working in the URL:
-
-http://150.241.250.4:7443/WP3Demo
+* Battery
+	
+	Calls mediascape.discovery.isPresent function to detect the presence of th battery agent, if the agent exists, the system sets the battery status as supported, unless it is set as unsupported. Then it will initialize battery value calling to mediascape.discovery.getExtra and will define on and off functions to subscribe to different events. This events will return the changes hapened on battery level changes, on battery charging changes on battery discharging time changes.
 
 
 [Top]: #navigation
 [Overview]: #overview
 [Architecture]: #architecture
 [API]: #api
-[JS Discovery API for Capabilities Discovery Agents]: #js-discovery-api-for-capabilities-discovery-agents
-[JS Discovery API for Networking Discovery Agents]: #js-discovery-api-for-networking-discovery-agents
-[Examples]: #examples
