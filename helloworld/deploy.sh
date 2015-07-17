@@ -1,5 +1,10 @@
 #!/bin/bash
-InstallFoleder=.
+
+FolderPath=$(pwd)
+echo $FolderPath
+InstallFolder=$FolderPath/deploy
+echo $InstallFoleder
+
 Folder=/tmp #Folder=./application-context
 
 
@@ -9,6 +14,8 @@ if [ -f /usr/bin/nodejs ]; then
 	nodeCommand=nodejs
 fi
 #####
+
+cd $Folder
 
 if [ ! -d $Folder/discovery-self ];
 then
@@ -46,34 +53,35 @@ fi
 cd $InstallFoleder
 
 ### TODO - maybe keep other old files??
-if [ -d $InstallFoleder/deploy/ ]; then
-	if [ -d $InstallFoleder/deploy/node_modules/ ]; then
-		mkdir $InstallFoleder/temp/
-		mkdir $InstallFoleder/temp/node_modules/
-		mv $InstallFoleder/deploy/node_modules/* $InstallFoleder/temp/node_modules/
+if [ -d $InstallFolder/ ]; then
+	if [ -d $InstallFolder/node_modules/ ]; then
+		mkdir $InstallFolder/temp/
+		mkdir $InstallFolder/temp/node_modules/
+		mv $InstallFolder/node_modules/* $InstallFolder/temp/node_modules/
 	fi
-		rm -r $InstallFoleder/deploy/
+		rm -r $InstallFolder/
 fi
 
-mkdir $InstallFoleder/deploy
+
+
+mkdir $InstallFolder/
+cd $InstallFolder/
 echo "Copy needed files from repository..."
-cp -R $Folder/application-context/Server/* $InstallFoleder/deploy/
-cp -R $Folder/application-context/helloworld/* $InstallFoleder/deploy/www/
-cp -R $Folder/discovery-multi/helloworld/js/mediascape/* $InstallFoleder/deploy/www/js/mediascape/
-rm $InstallFoleder/deploy/www/deploy.sh
-mkdir $InstallFoleder/deploy/www/js/
-cp -R $Folder/application-context/API/* $InstallFoleder/deploy/www/js/
-cp -R $Folder/discovery-self/API/mediascape/* $InstallFoleder/deploy/www/js/mediascape/
-cp -R $Folder/discovery-multi/API/mediascape/* $InstallFoleder/deploy/www/js/mediascape/
-cp -R $Folder/discovery-self/API/mediascape/lib/* $InstallFoleder/deploy/www/js/mediascape/lib/
+cp -R $Folder/application-context/Server/* $InstallFolder/
+cp -R $Folder/application-context/helloworld/* $InstallFolder/www/
+cp -R $Folder/discovery-multi/helloworld/js/mediascape/* $InstallFolder/www/js/mediascape/
+cp -R $Folder/application-context/API/* $InstallFolder/www/js/
+cp -R $Folder/discovery-self/API/mediascape/Discovery $InstallFolder/www/js/mediascape/
+cp -R $Folder/discovery-multi/API/mediascape/* $InstallFolder/www/js/mediascape/
+cp -R $Folder/discovery-self/API/mediascape/lib/* $InstallFolder/www/js/lib/
 
 if [ -d temp/node_modules/ ]; then
-	mkdir $InstallFoleder/deploy/node_modules/
-	mv $InstallFoleder/temp/node_modules/* $InstallFoleder/deploy/node_modules/
-	rm -r $InstallFoleder/temp/
+	mkdir $InstallFolder/node_modules/
+	mv $InstallFolder/temp/node_modules/* $InstallFolder/node_modules/
+	rm -r $InstallFolder/temp/
 fi
 
-cd $InstallFoleder/deploy/
+cd $InstallFolder/
 echo "Starting setup Script..."
 $nodeCommand setup.js
 echo "Installing dependencies..."
