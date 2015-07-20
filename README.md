@@ -1,6 +1,6 @@
 #Discovery-Multi
 
-In this folder you will find the Discovery For Aplication Context developed for [MediaScape project](http://mediascapeproject.eu/).
+In this folder you will find the mechanism to propagate the Discovery features across different devices on top of the Aplication Context developed for [MediaScape project](http://mediascapeproject.eu/).
 
 ## Navigation
 [Goals][] | [Structure][] | [Authors][] | [License][]
@@ -10,9 +10,11 @@ In this folder you will find the Discovery For Aplication Context developed for 
 
 MediaScape targets applications that provide shared experiences across multiple devices.
 
-Discovery-Multi integrates Agent Context and Discovery-Self to provide information about the current agent, it’s capabilities and events (as well as sensor management) basing on Discovering API published into Discovery-Self.
+In this context, to ease distributed application decisions, different devices running an application must provide shared awareness of their capabilities and features.
 
-Discovery For Aplication Context is based in two developments:
+Discovery-Multi integrates Agent Context and Discovery-Self to provide information about the current agent, it’s capabilities and events (as well as sensor management) based on Discovering API published into Discovery-Self.
+
+Discovery propagation through the Aplication Context includes two developments:
 * Discovery API:
 This library build awareness about the device features and the available devices ready to be connected for each application instance.
 https://github.com/mediascape/discovery-self
