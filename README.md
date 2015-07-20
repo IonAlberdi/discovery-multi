@@ -1,6 +1,6 @@
 #Discovery-Multi
 
-In this folder you will find the mechanism to propagate the Discovery features across different devices on top of the Aplication Context developed for [MediaScape project](http://mediascapeproject.eu/).
+In this folder you will find the Discovery For Agent Context. It means mechanism to propagate the Discovery features across different devices on top of the Aplication Context developed for [MediaScape project](http://mediascapeproject.eu/).
 
 ## Navigation
 [Goals][] | [Structure][] | [Authors][] | [License][]
@@ -12,14 +12,14 @@ MediaScape targets applications that provide shared experiences across multiple 
 
 In this context, to ease distributed application decisions, different devices running an application must provide shared awareness of their capabilities and features.
 
-Discovery-Multi integrates Agent Context and Discovery-Self to provide information about the current agent, it’s capabilities and events (as well as sensor management) based on Discovering API published into Discovery-Self.
+Discovery-Multi integrates Agent Context and Discovery-Self to provide information about the current agent, it’s capabilities and events (as well as sensor management) based in Discovering API published into Discovery-Self.
 
 Discovery propagation through the Aplication Context includes two developments:
 * Discovery API:
-This library build awareness about the device features and the available devices ready to be connected for each application instance.
+This library build awareness about the device features and the available devices ready to be connected to each application instance.
 https://github.com/mediascape/discovery-self
 * Application Context:
-The agent context provides information about the current agent, it’s capabilities and provides events (as well as sensor management)
+The Application context includes the Agent context that focus on information related to an agent, it’s capabilities and provides events with updates 
 https://github.com/mediascape/application-context
 
 
