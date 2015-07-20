@@ -6,7 +6,7 @@
 ## Overview
 [Top][]
 
-Creates some components based on [Implementing Custom Components](https://github.com/mediascape/application-context/tree/master/API#implementing-custom-components) and using the [Discovery API](https://github.com/mediascape/discovery-self/tree/master/API).
+This library creates some components based on the mechanism for [Implementing Custom Components](https://github.com/mediascape/application-context/tree/master/API#implementing-custom-components) and using the [Discovery API](https://github.com/mediascape/discovery-self/tree/master/API).
 
 ## Architecture
 [Top][]
@@ -15,10 +15,15 @@ In the following schema can be seen the integration of Discovery-Self and Applic
 
 ![alt text](./mediascap_discovery_multi.png "MediaScape - Agent and Application Context")
 
+The Discovery For Agent Context takes responsibility of:
+* encapsulating different Components into agents specialized in a specific technology or feature
+* interfacing the Discovery-self library through each agent to retrieve all the information from a device
+* pushing results to the Agent Context to provide shared awareness by means of the Agent Context
+
 ## API
 [Top][]
 
-Those are the agents that Discovery-Multi API discovers and encapsulates into Custom Components:
+This is the set of agents that Discovery-Multi API discovers and encapsulates into Custom Components:
 
 * UPNP
 
